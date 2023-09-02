@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Modal from "./components/Modal";
 import { RxDividerVertical } from "react-icons/rx";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal from "./components/Modal";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -50,7 +50,6 @@ const App = () => {
   };
 
   const setReminder = (selectedDate) => {
-    console.log("sss = ", formData.title);
     const currentDate = new Date();
 
     if (selectedDate > currentDate) {
@@ -91,36 +90,37 @@ const App = () => {
       <h2 className="text-center text-lg lg:text-2xl font-bold mb-5">
         Task Tracker
       </h2>
-      <div className=" mb-5 lg:flex lg:justify-center lg:items-center">
-        <div className=" lg:max-w-[800px] bg-white rounded-lg p-4 w-full">
+      <div className="mb-5 lg:flex lg:justify-center lg:items-center">
+        <div className="lg:max-w-[800px] bg-white rounded-lg p-4 w-full">
           <form onSubmit={handleSubmit}>
-            <div className=" p-2 border border-gray-700 rounded-lg mb-3 pl-4">
+            <div className="p-2 border border-gray-700 rounded-lg mb-3 pl-4">
               <input
                 type="text"
                 placeholder="Add Title..."
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className=" w-full focus:outline-none"
+                className="w-full focus:outline-none"
               />
             </div>
-            <div className=" p-2 border border-gray-700 rounded-lg mb-3 pl-4">
+            <div className="p-2 border border-gray-700 rounded-lg mb-3 pl-4">
               <textarea
                 type="text"
                 placeholder="Add Description..."
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className=" w-full focus:outline-none"
+                className="w-full focus:outline-none"
               ></textarea>
             </div>
 
             <p>Choose due date</p>
-            <div className=" p-2 border border-gray-700 rounded-lg mb-3 pl-4 ">
+            <div className="p-2 border border-gray-700 rounded-lg mb-3 pl-4 ">
               <DatePicker
                 selected={selectDate}
                 onChange={(date) => setSelectDate(date)}
                 className="custom-datepicker-input"
+                dateFormat="dd/MM/yyyy"
               />
             </div>
 
@@ -130,14 +130,18 @@ const App = () => {
                 type="checkbox"
                 name="reminder"
                 checked={formData.reminder}
-                onClick={handleReminderChange}
+                onChange={handleReminderChange}
               />
             </div>
 
             <button
               type="submit"
-              className=" bg-blue-900 text-white px-4 py-2 rounded-xl cursor-pointer"
-              disabled={!formData.title.length || !formData.description.length}
+              className="bg-blue-900 text-white px-4 py-2 rounded-xl cursor-pointer"
+              disabled={
+                !formData.title.length ||
+                !formData.description.length ||
+                !selectDate
+              }
             >
               Save
             </button>
@@ -194,7 +198,7 @@ const App = () => {
 
                     <div>
                       {description.length > 150 ? (
-                        <p className="w-[85%] mb-4">
+                        <p className="w-[85%] mb-4 cursor-pointer">
                           {showMore
                             ? description
                             : description.substring(0, 150)}
@@ -203,7 +207,9 @@ const App = () => {
                           </strong>
                         </p>
                       ) : (
-                        <p className="w-[85%] mb-4">{description}</p>
+                        <p className="w-[85%] mb-4 cursor-pointer">
+                          {description}
+                        </p>
                       )}
                     </div>
                     <p>
